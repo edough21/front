@@ -1,20 +1,31 @@
-import type { ButtonHTMLAttributes } from "react";
-import LCD from "../theme/lcd";
+import type { ReactNode } from "react";
 
-export default function LCDButton(
-  props: ButtonHTMLAttributes<HTMLButtonElement>
-) {
+interface Props {
+  onClick: () => void;
+  children: ReactNode;
+  disabled?: boolean;
+}
+
+export default function LCDButton({
+  onClick,
+  children,
+  disabled = false,
+}: Props) {
   return (
     <button
-      {...props}
+      onClick={onClick}
+      disabled={disabled}
       style={{
-        height: LCD.buttonHeight,
+        display: "block",
         width: "100%",
-        marginBottom: 12,
-        borderRadius: LCD.buttonRadius,
-        fontSize: LCD.bodySize,
-        cursor: "pointer",
+        margin: "12px 0",
+        padding: "12px",
+        fontSize: "16px",
+        opacity: disabled ? 0.5 : 1,
+        cursor: disabled ? "not-allowed" : "pointer",
       }}
-    />
+    >
+      {children}
+    </button>
   );
 }

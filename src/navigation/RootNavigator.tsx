@@ -12,26 +12,31 @@ export default function RootNavigator() {
   const [screen, setScreen] = useState<Screen>("home");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  // SAFE navigation wrapper
+  const navigate = (next: Screen) => {
+    setScreen(next);
+  };
+
   return (
     <>
       {screen === "home" && (
-        <HomeDashboard onNavigate={setScreen} />
+        <HomeDashboard onNavigate={navigate} />
       )}
 
       {screen === "heart" && (
-        <HeartAnalysis onBack={() => setScreen("home")} />
+        <HeartAnalysis onBack={() => navigate("home")} />
       )}
 
       {screen === "lung" && (
-        <LungAnalysis onBack={() => setScreen("home")} />
+        <LungAnalysis onBack={() => navigate("home")} />
       )}
 
       {screen === "history" && (
         <SessionHistory
-          onBack={() => setScreen("home")}
+          onBack={() => navigate("home")}
           onOpen={(id) => {
             setSelectedId(id);
-            setScreen("detail");
+            navigate("detail");
           }}
         />
       )}
@@ -39,7 +44,7 @@ export default function RootNavigator() {
       {screen === "detail" && selectedId && (
         <SessionDetail
           sessionId={selectedId}
-          onBack={() => setScreen("history")}
+          onBack={() => navigate("history")}
         />
       )}
     </>
