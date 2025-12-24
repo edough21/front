@@ -6,13 +6,15 @@ import LungAnalysis from "../screens/LungAnalysis";
 import SessionHistory from "../screens/SessionHistory";
 import SessionDetail from "../screens/SessionDetail";
 
+import type { Session } from "../models/Session";
+
 type Screen = "home" | "heart" | "lung" | "history" | "detail";
 
 export default function RootNavigator() {
   const [screen, setScreen] = useState<Screen>("home");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
 
-  // SAFE navigation wrapper
+  // Centralized navigation
   const navigate = (next: Screen) => {
     setScreen(next);
   };
@@ -34,17 +36,20 @@ export default function RootNavigator() {
       {screen === "history" && (
         <SessionHistory
           onBack={() => navigate("home")}
-          onOpen={(id) => {
-            setSelectedId(id);
+          onOpen={(session) => {
+            setSelectedSession(session);
             navigate("detail");
           }}
         />
       )}
 
-      {screen === "detail" && selectedId && (
+      {screen === "detail" && selectedSession && (
         <SessionDetail
-          sessionId={selectedId}
-          onBack={() => navigate("history")}
+          session={selectedSession}
+          onBack={() => {
+            setSelectedSession(null);
+            navigate("history");
+          }}
         />
       )}
     </>
